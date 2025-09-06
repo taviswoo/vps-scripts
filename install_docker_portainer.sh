@@ -1,6 +1,18 @@
 #!/bin/bash
 set -e
 
+# 检查是否为 root 用户
+if [[ $EUID -ne 0 ]]; then
+  echo "[-] 请使用 root 用户或通过 sudo 执行此脚本"
+  exit 1
+fi
+
+# 检查是否为 Ubuntu 系统
+if ! command -v apt &> /dev/null; then
+  echo "[-] 当前系统不支持 apt，可能不是 Ubuntu"
+  exit 1
+fi
+
 echo "[+] 检测系统架构..."
 ARCH=$(uname -m)
 if [[ "$ARCH" == "x86_64" ]]; then
